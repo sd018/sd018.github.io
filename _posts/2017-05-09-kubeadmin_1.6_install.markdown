@@ -63,7 +63,7 @@ EOF
 yum install -y docker kubelet kubeadm kubectl kubernetes-cni
 ```
 
-######RPM包安装
+RPM包安装
 
 若使用PRM包安装，切换到RPM安装包存放目录
 
@@ -73,131 +73,135 @@ yum install -y docker kubelet kubeadm kubectl kubernetes-cni
 -rw-r--r-- 1 root root  8217270 Apr 12 11:34 23961d0f7dca1ed118b948195f2fb5dd7a07503d69d7d8ab4433219ea98d033e-kubeadm-1.6.1-0.x86_64.rpm
 -rw-r--r-- 1 root root  8627678 Apr 12 11:34 9d1ccf0877dfc4228a923a9614661b27d663694680e2bc0a1c184aa937fbf7f2-kubectl-1.6.1-0.x86_64.rpm
 -rw-r--r-- 1 root root 15484562 Apr 12 11:34 cde0b9092d421800f7207df677d6a1f321c82179e89a24e4b3c009a875e62c91-kubelet-1.6.1-0.x86_64.rpm
--rw-r--r-- 1 root root26888 Apr 12 11:34 container-selinux-2.9-4.el7.noarch.rpm
+-rw-r--r-- 1 root root 26888 Apr 12 11:34 container-selinux-2.9-4.el7.noarch.rpm
 -rw-r--r-- 1 root root 21089820 Apr 12 11:34 docker-1.12.6-11.el7.centos.x86_64.rpm
 -rw-r--r-- 1 root root  4617844 Apr 12 11:34 docker-client-1.12.6-11.el7.centos.x86_64.rpm
--rw-r--r-- 1 root root72884 Apr 12 11:34 docker-common-1.12.6-11.el7.centos.x86_64.rpm
+-rw-r--r-- 1 root root 72884 Apr 12 11:34 docker-common-1.12.6-11.el7.centos.x86_64.rpm
 -rw-r--r-- 1 root root  7800562 Apr 12 11:34 e7a4403227dd24036f3b0615663a371c4e07a95be5fee53505e647fd8ae58aa6-kubernetes-cni-0.5.1-0.x86_64.rpm
 -rw-r--r-- 1 root root  1110536 Apr 12 11:34 oci-register-machine-0-1.11.gitdd0daef.el7.x86_64.rpm
--rw-r--r-- 1 root root29664 Apr 12 11:34 oci-systemd-hook-0.1.4-9.git671c428.el7.x86_64.rpm
+-rw-r--r-- 1 root root 29664 Apr 12 11:34 oci-systemd-hook-0.1.4-9.git671c428.el7.x86_64.rpm
 -rw-r--r-- 1 root root 7760 Apr 12 11:34 skopeo-containers-0.1.18-1.el7.x86_64.rpm
 -rw-r--r-- 1 root root   261512 Apr 12 11:34 socat-1.7.2.2-5.el7.x86_64.rpm
 [root@vm-shalku91 ~]# yum localinstall package *.rpm
 ```
 
-###Docker devicemapper配置
+## Docker devicemapper配置 ##
+
+新建磁盘分区
+```ruby
+[root@vm-shalku91 ~]# fdisk -l
+Disk /dev/sda: 21.5 GB, 21474836480 bytes, 41943040 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: dos
+Disk identifier: 0x000a251f
+
+   Device Boot  Start End  Blocks   Id  System
+/dev/sda1   *2048 1026047  512000   83  Linux
+/dev/sda2 10260484194303920458496   8e  Linux LVM
+
+Disk /dev/mapper/centos-root: 18.8 GB, 18756927488 bytes, 36634624 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
 
 
-######新建磁盘分区
-
-    [root@vm-shalku91 ~]# fdisk -l
-    
-    Disk /dev/sda: 21.5 GB, 21474836480 bytes, 41943040 sectors
-    Units = sectors of 1 * 512 = 512 bytes
-    Sector size (logical/physical): 512 bytes / 512 bytes
-    I/O size (minimum/optimal): 512 bytes / 512 bytes
-    Disk label type: dos
-    Disk identifier: 0x000a251f
-    
-       Device Boot  Start End  Blocks   Id  System
-    /dev/sda1   *2048 1026047  512000   83  Linux
-    /dev/sda2 10260484194303920458496   8e  Linux LVM
-    
-    Disk /dev/mapper/centos-root: 18.8 GB, 18756927488 bytes, 36634624 sectors
-    Units = sectors of 1 * 512 = 512 bytes
-    Sector size (logical/physical): 512 bytes / 512 bytes
-    I/O size (minimum/optimal): 512 bytes / 512 bytes
-    
-    
-    Disk /dev/mapper/centos-swap: 2147 MB, 2147483648 bytes, 4194304 sectors
-    Units = sectors of 1 * 512 = 512 bytes
-    Sector size (logical/physical): 512 bytes / 512 bytes
-    I/O size (minimum/optimal): 512 bytes / 512 bytes
-    
-    
-    Disk /dev/mapper/centos-docker--poolmeta: 20 MB, 20971520 bytes, 40960 sectors
-    Units = sectors of 1 * 512 = 512 bytes
-    Sector size (logical/physical): 512 bytes / 512 bytes
-    I/O size (minimum/optimal): 512 bytes / 512 bytes
-    
-    
-    Disk /dev/sdb: 42.9 GB, 42949672960 bytes, 83886080 sectors
-    Units = sectors of 1 * 512 = 512 bytes
-    Sector size (logical/physical): 512 bytes / 512 bytes
-    I/O size (minimum/optimal): 512 bytes / 512 bytes
-    [root@vm-shalku91 ~]# fdisk /dev/sdb
-    Welcome to fdisk (util-linux 2.23.2).
-    
-    Changes will remain in memory only, until you decide to write them.
-    Be careful before using the write command.
-    
-    Device does not contain a recognized partition table
-    Building a new DOS disklabel with disk identifier 0x7296037a.
-    
-    Command (m for help): n
-    Partition type:
-       p   primary (0 primary, 0 extended, 4 free)
-       e   extended
-    Select (default p): 
-    Using default response p
-    Partition number (1-4, default 1): 
-    First sector (2048-83886079, default 2048): 
-    Using default value 2048
-    Last sector, +sectors or +size{K,M,G} (2048-83886079, default 83886079): 
-    Using default value 83886079
-    Partition 1 of type Linux and of size 40 GiB is set
-    
-    Command (m for help): p
-    
-    Disk /dev/sdb: 42.9 GB, 42949672960 bytes, 83886080 sectors
-    Units = sectors of 1 * 512 = 512 bytes
-    Sector size (logical/physical): 512 bytes / 512 bytes
-    I/O size (minimum/optimal): 512 bytes / 512 bytes
-    Disk label type: dos
-    Disk identifier: 0x7296037a
-    
-       Device Boot  Start End  Blocks   Id  System
-    /dev/sdb120488388607941942016   83  Linux
-    
-    Command (m for help): t
-    Selected partition 1
-    Hex code (type L to list all codes): 8e
-    Changed type of partition 'Linux' to 'Linux LVM'
-    
-    Command (m for help): w
-    The partition table has been altered!
-    
-    Calling ioctl() to re-read partition table.
-    Syncing disks.
-    [root@vm-shalku91 ~]# partprobe 
+Disk /dev/mapper/centos-swap: 2147 MB, 2147483648 bytes, 4194304 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
 
 
+Disk /dev/mapper/centos-docker--poolmeta: 20 MB, 20971520 bytes, 40960 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
 
 
-######创建PV卷
+Disk /dev/sdb: 42.9 GB, 42949672960 bytes, 83886080 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+[root@vm-shalku91 ~]# fdisk /dev/sdb
+Welcome to fdisk (util-linux 2.23.2).
 
-    $ pvcreate /dev/sdb1
-######创建VG卷
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
 
-    $ vgcreate docker /dev/sdb1
-######创建LV卷
+Device does not contain a recognized partition table
+Building a new DOS disklabel with disk identifier 0x7296037a.
 
-    $ lvcreate --wipesignatures y -n thinpool docker -l 95%VG
-    $ lvcreate --wipesignatures y -n thinpoolmeta docker -l 1%VG
+Command (m for help): n
+Partition type:
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended
+Select (default p): 
+Using default response p
+Partition number (1-4, default 1): 
+First sector (2048-83886079, default 2048): 
+Using default value 2048
+Last sector, +sectors or +size{K,M,G} (2048-83886079, default 83886079): 
+Using default value 83886079
+Partition 1 of type Linux and of size 40 GiB is set
 
-######格式化LV
+Command (m for help): p
 
-    $ lvconvert -y --zero n -c 512K --thinpool docker/thinpool --poolmetadata docker/thinpoolmeta
+Disk /dev/sdb: 42.9 GB, 42949672960 bytes, 83886080 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: dos
+Disk identifier: 0x7296037a
 
-######配置LVM Proflie
+   Device Boot  Start End  Blocks   Id  System
+/dev/sdb120488388607941942016   83  Linux
 
-    $ cat <<EOF> /etc/lvm/profile/docker-thinpool.profile
-    activation {
-    thin_pool_autoextend_threshold=80
-    thin_pool_autoextend_percent=20
-    }
-    EOF
+Command (m for help): t
+Selected partition 1
+Hex code (type L to list all codes): 8e
+Changed type of partition 'Linux' to 'Linux LVM'
 
+Command (m for help): w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+Syncing disks.
+[root@vm-shalku91 ~]# partprobe 
+```
+
+创建PV卷
+```ruby
+pvcreate /dev/sdb1
+```
+
+创建VG卷
+```ruby
+vgcreate docker /dev/sdb1
+```
+创建LV卷
+```ruby
+lvcreate --wipesignatures y -n thinpool docker -l 95%VG
+lvcreate --wipesignatures y -n thinpoolmeta docker -l 1%VG
+```ruby
+
+格式化LV
+```ruby
+lvconvert -y --zero n -c 512K --thinpool docker/thinpool --poolmetadata docker/thinpoolmeta
+```ruby
+
+配置LVM Proflie
+```ruby
+cat <<EOF> /etc/lvm/profile/docker-thinpool.profile
+activation {
+thin_pool_autoextend_threshold=80
+thin_pool_autoextend_percent=20
+}
+EOF
+```ruby
+
+
+docker-thinpool.profile
    
 
 
