@@ -20,7 +20,7 @@ tags:
 本文介绍了一种轻量级快速部署工具[kubeadm]，旨在改善开发者在安装、调试和使用k8s时的体验，降低安装和使用门槛，它仍然处于Alpha状态，官方不建议在Production环境下使用。
 
 
-## 系统版本
+### 系统版本
 - OS：Centos7.3
 - 内核：3.10.0-514.10.2.el7.x86_64
 - k8s：v1.6.1
@@ -28,7 +28,7 @@ tags:
 - docker:1.12.6
 
 
-## 系统配置
+### 系统配置
 * 8CPU
 * 16GB Memory
 * Swap：8G
@@ -36,7 +36,7 @@ tags:
 * docker lvm：40G
 
 
-## 配置本地yum源 ##
+### 配置本地yum源 ##
 
 备份系统默认`repo`
 ```ruby
@@ -84,7 +84,7 @@ RPM包安装
 [root@vm-shalku91 ~]# yum localinstall package *.rpm
 ```
 
-## Docker devicemapper配置 ##
+### Docker devicemapper配置 ##
 新建磁盘分区
 ```ruby
 [root@vm-shalku91 ~]# fdisk -l
