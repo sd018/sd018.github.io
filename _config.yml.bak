@@ -6,7 +6,7 @@ email: sd018@aliyun.com
 description: ""
 keyword: ""
 url: "sd018.github.io"              # your host, for absolute URL
-# baseurl: "/huxblog-boilerplate"         # for example, '/blog' if your blog hosted on 'host/blog'
+baseurl: "/sd018"         # for example, '/blog' if your blog hosted on 'host/blog'
 
 
 
