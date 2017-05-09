@@ -183,12 +183,12 @@ vgcreate docker /dev/sdb1
 ```ruby
 lvcreate --wipesignatures y -n thinpool docker -l 95%VG
 lvcreate --wipesignatures y -n thinpoolmeta docker -l 1%VG
-```ruby
+```
 
 格式化LV
 ```ruby
 lvconvert -y --zero n -c 512K --thinpool docker/thinpool --poolmetadata docker/thinpoolmeta
-```ruby
+```
 
 配置LVM Proflie
 ```ruby
@@ -198,10 +198,10 @@ thin_pool_autoextend_threshold=80
 thin_pool_autoextend_percent=20
 }
 EOF
-```ruby
+```
 
 
-docker-thinpool.profile
+[docker-thinpool.profile](https://github.com/sd018/kuadeadm_install/blob/master/docker-thinpool.profile)
    
 
 
