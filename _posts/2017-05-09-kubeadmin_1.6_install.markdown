@@ -36,25 +36,15 @@ tags:
 * docker lvm：40G
 
 
-
-## 配置本地yum源
+## 配置本地yum源 ##
 
 备份系统默认`repo`  
-```
-mkdir /etc/yum.repos.d/backup  
+```ruby
+mkdir /etc/yum.repos.d/backup
 mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/backup
 ``` 
 
 添加阿里云Yum repo  
-
-```ruby
-require 'redcarpet'
-markdown = Redcarpet.new("Hello World!")
-puts markdown.to_html
-```
-======
-
- 
 ```ruby
 cat <<EOF> /etc/yum.repos.d/kubernetes.repo.repo
 [kubernetes]
@@ -68,15 +58,16 @@ http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
 ```
 
-###安装docker kubelet kubeadm kubectl组件
-
-    yum install -y docker kubelet kubeadm kubectl kubernetes-cni
+安装docker kubelet kubeadm kubectl组件
+```ruby
+yum install -y docker kubelet kubeadm kubectl kubernetes-cni
+```
 
 ######RPM包安装
 
 若使用PRM包安装，切换到RPM安装包存放目录
 
-```
+```ruby
 [root@vm-shalku91 ~]# cd k8s
 [root@vm-shalku91 k8s]# ll
 -rw-r--r-- 1 root root  8217270 Apr 12 11:34 23961d0f7dca1ed118b948195f2fb5dd7a07503d69d7d8ab4433219ea98d033e-kubeadm-1.6.1-0.x86_64.rpm
