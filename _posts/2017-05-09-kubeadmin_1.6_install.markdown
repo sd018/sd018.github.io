@@ -40,18 +40,12 @@ tags:
 ## 配置本地yum源
 
 备份系统默认`repo`  
-`mkdir /etc/yum.repos.d/backup`  
-`mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/backup`  
+```
+mkdir /etc/yum.repos.d/backup  
+mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/backup
+``` 
 
 添加阿里云Yum repo  
-
-```
-function test() {
-  console.log("notice the blank line before this function?");
-}
-```
-
-=====
 
 ```ruby
 require 'redcarpet'
