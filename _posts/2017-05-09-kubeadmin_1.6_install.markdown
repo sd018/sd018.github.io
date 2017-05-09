@@ -393,7 +393,8 @@ Registries: registry.aegonthtf.com (secure), docker.io (secure)
 
 
 
->若公司网络环境使用代理配置，则配置如下
+>若公司网络环境使用代理配置，则配置如下  
+
 配置docker 代理
 ```ruby
 mkdir /etc/systemd/system/docker.service.d
@@ -462,139 +463,23 @@ Loaded image: gcr.io/google_containers/pause-amd64:3.0
 kubeadm init --kubernetes-version=v1.6.1 --apiserver-advertise-address=10.72.243.137
 ```
 
-######复制admin.conf 至根目录
-
-    sudo cp /etc/kubernetes/admin.conf $HOME/
-    sudo chown $(id -u):$(id -g) $HOME/admin.conf
-    echo “KUBECONFIG=$HOME/admin.conf” >> /etc/profile
-    source /etc/profile
-
-######配置weave 网络
-    [root@vm-shalku91 k8s]# more weave-daemonset-k8s-1.6.yaml
-    kind: ClusterRole
-    apiVersion: rbac.authorization.k8s.io/v1beta1
-    metadata:
-      name: weave-net
-    rules:
-    - apiGroups:
-      - ""
-      resources:
-      - pods
-      - namespaces
-      - nodes
-      verbs:
-      - get
-      - list
-      - watch
-    - apiGroups:
-      - extensions
-      resources:
-      - networkpolicies
-      verbs:
-      - get
-      - list
-      - watch
-    ---
-    apiVersion: v1
-    kind: ServiceAccount
-    metadata:
-      name: weave-net
-      namespace: kube-system
-    ---
-    kind: ClusterRoleBinding
-    apiVersion: rbac.authorization.k8s.io/v1beta1
-    metadata:
-      name: weave-net
-    roleRef:
-      apiGroup: rbac.authorization.k8s.io
-      kind: ClusterRole
-      name: weave-net
-    subjects:
-    - kind: ServiceAccount
-      name: weave-net
-      namespace: kube-system
-    ---
-    apiVersion: extensions/v1beta1
-    kind: DaemonSet
-    metadata:
-      name: weave-net
-      namespace: kube-system
-    spec:
-      template:
-    metadata:
-      labels:
-    name: weave-net
-    spec:
-      hostNetwork: true
-      hostPID: true
-      containers:
-    - name: weave
-      image: weaveworks/weave-kube:1.9.4
-      command:
-    - /home/weave/launch.sh
-      livenessProbe:
-    initialDelaySeconds: 30
-    httpGet:
-      host: 127.0.0.1
-      path: /status
-      port: 6784
-      securityContext:
-    privileged: true
-      volumeMounts:
-    - name: weavedb
-      mountPath: /weavedb
-    - name: cni-bin
-      mountPath: /host/opt
-    - name: cni-bin2
-      mountPath: /host/home
-    - name: cni-conf
-      mountPath: /host/etc
-    - name: dbus
-      mountPath: /host/var/lib/dbus
-    - name: lib-modules
-      mountPath: /lib/modules
-      resources:
-    requests:
-      cpu: 10m
-    - name: weave-npc
-      image: weaveworks/weave-npc:1.9.4
-      resources:
-    requests:
-      cpu: 10m
-      securityContext:
-    privileged: true
-      restartPolicy: Always
-      tolerations:
-      - key: node-role.kubernetes.io/master
-    effect: NoSchedule
-      serviceAccountName: weave-net
-      securityContext:
-    seLinuxOptions:
-      type: spc_t
-      volumes:
-    - name: weavedb
-      emptyDir: {}
-    - name: cni-bin
-      hostPath:
-    path: /opt
-    - name: cni-bin2
-      hostPath:
-    path: /home
-    - name: cni-conf
-      hostPath:
-    path: /etc
-    - name: dbus
-      hostPath:
-    path: /var/lib/dbus
-    - name: lib-modules
-      hostPath:
-    path: /lib/modules
-    [root@vm-shalku91 k8s]# kubectl apply -f weave-daemonset-k8s-1.6.yaml
+复制admin.conf 至根目录
+```ruby
+sudo cp /etc/kubernetes/admin.conf $HOME/
+sudo chown $(id -u):$(id -g) $HOME/admin.conf
+echo “KUBECONFIG=$HOME/admin.conf” >> /etc/profile
+source /etc/profile
+```
+配置weave 网络
+```ruby
+[root@vm-shalku91 k8s]# kubectl apply -f weave-daemonset-k8s-1.6.yaml
+```
+yaml文件:[weave-daemonset-k8s-1.6.yaml](https://github.com/sd018/kuadeadm_install/blob/master/weave-daemonset-k8s-1.6.yaml)
  
-######安装完毕后，会有命令提示加入node 节点
-
-    kubeadm join --token 054650.0ecaaf64fb14da94 10.72.243.137:6443
-
+安装完毕后，会有命令提示加入node 节点
+```ruby
+kubeadm join --token 054650.0ecaaf64fb14da94 10.72.243.137:6443
+```
 > 参考https://kubernetes.io/docs/getting-started-guides/kubeadm/
 
 
@@ -602,258 +487,23 @@ kubeadm init --kubernetes-version=v1.6.1 --apiserver-advertise-address=10.72.243
 
 
 
-######部署K8s_dashboard
-    [root@vm-shalku91 k8s]# more kube-dashboard-rbac.yml
-    kind: ClusterRoleBinding
-    apiVersion: rbac.authorization.k8s.io/v1beta1
-    metadata:
-      name: dashboard-admin
-    roleRef:
-      apiGroup: rbac.authorization.k8s.io
-      kind: ClusterRole
-      name: cluster-admin
-    subjects:
-    - kind: ServiceAccount
-      name: default
-      namespace: kube-system
-
-    [root@vm-shalku91 k8s]# more kubernetes-dashboard.yaml
-    # Copyright 2015 Google Inc. All Rights Reserved.
-    #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    # http://www.apache.org/licenses/LICENSE-2.0
-    #
-    # Unless required by applicable law or agreed to in writing, software
-    # distributed under the License is distributed on an "AS IS" BASIS,
-    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    # See the License for the specific language governing permissions and
-    # limitations under the License.
-    
-    # Configuration to deploy release version of the Dashboard UI.
-    #
-    # Example usage: kubectl create -f <this_file>
-    
-    kind: Deployment
-    apiVersion: extensions/v1beta1
-    metadata:
-      labels:
-    app: kubernetes-dashboard
-      name: kubernetes-dashboard
-      namespace: kube-system
-    spec:
-      replicas: 1
-      revisionHistoryLimit: 10
-      selector:
-    matchLabels:
-      app: kubernetes-dashboard
-      template:
-    metadata:
-      labels:
-    app: kubernetes-dashboard
-      # Comment the following annotation if Dashboard must not be deployed on master
-      annotations:
-    scheduler.alpha.kubernetes.io/tolerations: |
-      [
-    {
-      "key": "dedicated",
-      "operator": "Equal",
-      "value": "master",
-      "effect": "NoSchedule"
-    }
-      ]
-    spec:
-      containers:
-      - name: kubernetes-dashboard
-    image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.6.0
-    ports:
-    - containerPort: 9090
-      protocol: TCP
-    args:
-      # Uncomment the following line to manually specify Kubernetes API server Host
-      # If not specified, Dashboard will attempt to auto discover the API server and connect
-      # to it. Uncomment only if the default does not work.
-      # - --apiserver-host=http://my-address:port
-    livenessProbe:
-      httpGet:
-    path: /
-    port: 9090
-      initialDelaySeconds: 30
-      timeoutSeconds: 30
-    ---
-    kind: Service
-    apiVersion: v1
-    metadata:
-      labels:
-    app: kubernetes-dashboard
-      name: kubernetes-dashboard
-      namespace: kube-system
-    spec:
-      type: NodePort
-      ports:
-      - port: 80
-    targetPort: 9090
-      selector:
-    app: kubernetes-dashboard
-    [root@vm-shalku91 k8s]# kubectl create -f kube-dashboard-rbac.yml
-    [root@vm-shalku91 k8s]# kubectl create -f kubernetes-dashboard.yaml
+### 部署K8s_dashboard
+```ruby
+[root@vm-shalku91 k8s]# kubectl create -f kube-dashboard-rbac.yml
+[root@vm-shalku91 k8s]# kubectl create -f kubernetes-dashboard.yaml
+```
+yaml文件：  
+[kube-dashboard-rbac.yml](https://github.com/sd018/kuadeadm_install/blob/master/kube-dashboard-rbac.yml)  
+[kubernetes-dashboard.yaml](https://github.com/sd018/kuadeadm_install/blob/master/kubernetes-dashboard.yaml)
 
 **Note:** 
 因k8s 1.6 dashboard 没有权限访问default namespace，具体参考https://github.com/kubernetes/dashboard/issues/1803
 
-######部署weavescope
-    [root@vm-shalku91 k8s]# more weavescope.yaml
-    apiVersion: v1
-    kind: List
-    items:
-      - metadata:
-      labels:
-    name: weave-scope
-      name: weave-scope
-      annotations:
-    cloud.weave.works/launcher-info: |-
-      {
-    "server-version": "master-4b19761",
-    "original-request": {
-      "url": "/k8s/v1.5/scope.yaml?/launch/k8s/weavescope.yaml",
-      "date": "Tue Apr 11 2017 08:43:10 GMT+0000 (UTC)"
-    },
-    "email-address": "support@weave.works"
-      }
-    apiVersion: v1
-    kind: ServiceAccount
-      - metadata:
-      labels:
-    name: weave-scope-app
-    app: weave-scope
-    weave-cloud-component: scope
-    weave-scope-component: app
-      name: weave-scope-app
-      annotations:
-    cloud.weave.works/launcher-info: |-
-      {
-    "server-version": "master-4b19761",
-    "original-request": {
-      "url": "/k8s/v1.5/scope.yaml?/launch/k8s/weavescope.yaml",
-      "date": "Tue Apr 11 2017 08:43:10 GMT+0000 (UTC)"
-    },
-    "email-address": "support@weave.works"
-      }
-    spec:
-      template:
-    metadata:
-      labels:
-    name: weave-scope-app
-    app: weave-scope
-    weave-cloud-component: scope
-    weave-scope-component: app
-    spec:
-      containers:
-    - name: app
-      image: 'weaveworks/scope:1.3.0'
-      imagePullPolicy: IfNotPresent
-      args:
-    - '--no-probe'
-      ports:
-    - containerPort: 4040
-      protocol: TCP
-      replicas: 1
-    apiVersion: extensions/v1beta1
-    kind: Deployment
-      - metadata:
-      labels:
-    name: weave-scope-app
-    app: weave-scope
-    weave-cloud-component: scope
-    weave-scope-component: app
-      name: weave-scope-app
-      annotations:
-    cloud.weave.works/launcher-info: |-
-      {
-    "server-version": "master-4b19761",
-    "original-request": {
-      "url": "/k8s/v1.5/scope.yaml?/launch/k8s/weavescope.yaml",
-      "date": "Tue Apr 11 2017 08:43:10 GMT+0000 (UTC)"
-    },
-    "email-address": "support@weave.works"
-      }
-    spec:
-      ports:
-    - name: app
-      port: 80
-      targetPort: 4040
-      protocol: TCP
-      selector:
-    name: weave-scope-app
-    app: weave-scope
-    weave-cloud-component: scope
-    weave-scope-component: app
-    apiVersion: v1
-    kind: Service
-      - metadata:
-      labels:
-    name: weave-scope-agent
-    app: weave-scope
-    weave-cloud-component: scope
-    weave-scope-component: agent
-      name: weave-scope-agent
-      annotations:
-    cloud.weave.works/launcher-info: |-
-      {
-    "server-version": "master-4b19761",
-    "original-request": {
-      "url": "/k8s/v1.5/scope.yaml?/launch/k8s/weavescope.yaml",
-      "date": "Tue Apr 11 2017 08:43:10 GMT+0000 (UTC)"
-    },
-    "email-address": "support@weave.works"
-      }
-    spec:
-      template:
-    metadata:
-      labels:
-    name: weave-scope-agent
-    app: weave-scope
-    weave-cloud-component: scope
-    weave-scope-component: agent
-      annotations:
-    scheduler.alpha.kubernetes.io/tolerations: >-
-      [{"key":"dedicated","operator":"Equal","value":"master","effect":"NoSchedule"}]
-    spec:
-      containers:
-    - name: agent
-      image: 'weaveworks/scope:1.3.0'
-      imagePullPolicy: IfNotPresent
-      args:
-    - '--no-app'
-    - '--probe.docker.bridge=docker0'
-    - '--probe.docker=true'
-    - '--probe.kubernetes=true'
-    - >-
-      $(WEAVE_SCOPE_APP_SERVICE_HOST):$(WEAVE_SCOPE_APP_SERVICE_PORT)
-      securityContext:
-    privileged: true
-      volumeMounts:
-    - name: docker-socket
-      mountPath: /var/run/docker.sock
-    - name: scope-plugins
-      mountPath: /var/run/scope/plugins
-      volumes:
-    - name: docker-socket
-      hostPath:
-    path: /var/run/docker.sock
-    - name: scope-plugins
-      hostPath:
-    path: /var/run/scope/plugins
-      hostPID: true
-      hostNetwork: true
-      serviceAccountName: weave-scope
-    apiVersion: extensions/v1beta1
-    kind: DaemonSet
-
-    [root@vm-shalku91 k8s]# kubectl apply -f weavescope.yaml  --namespace="kube-system"
- 
+### 部署weavescope
+```ruby
+[root@vm-shalku91 k8s]# kubectl apply -f scope.yaml  --namespace="kube-system"
+```
+yaml文件：[scope.yaml](https://github.com/sd018/kuadeadm_install/blob/master/scope.yaml)
 
 > 参考https://www.weave.works/docs/scope/latest/installing/#k8s-standalone
 
