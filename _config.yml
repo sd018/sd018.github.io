@@ -1,9 +1,9 @@
 # Site settings
-# title: sd018 Blog
-# SEOTitle: 小付的博客 | sd018 Blog
-# header-img: img/home-bg.jpg
+title: sd018 Blog
+SEOTitle: 小付的博客 | sd018 Blog
+header-img: img/home-bg.jpg
 email: sd018@aliyun.com
-description: "test1"
+description: "Hi,This is sd018"
 # keyword: "test2"
 url: "sd018.github.io"              # your host, for absolute URL
 # baseurl: "/sd018"         # for example, '/blog' if your blog hosted on 'host/blog'
