@@ -393,8 +393,7 @@ Registries: registry.aegonthtf.com (secure), docker.io (secure)
 
 
 
->若公司网络环境使用代理配置，则配置如下  
-
+若公司网络环境使用代理配置，则配置如下
 配置docker 代理
 ```ruby
 mkdir /etc/systemd/system/docker.service.d

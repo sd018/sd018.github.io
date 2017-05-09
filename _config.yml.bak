@@ -6,17 +6,17 @@ email: sd018@aliyun.com
 description: ""
 keyword: ""
 url: "sd018.github.io"              # your host, for absolute URL
-baseurl: "/huxblog-boilerplate"         # for example, '/blog' if your blog hosted on 'host/blog'
+# baseurl: "/huxblog-boilerplate"         # for example, '/blog' if your blog hosted on 'host/blog'
 
 
 
 # SNS settings
 RSS: false
-#weibo_username:     huxpro
-#zhihu_username:     huxpro
+# weibo_username:     huxpro
+# zhihu_username:     huxpro
 github_username:    sd018
-#twitter_username:  huxpro
-#facebook_username:  huxpro
+# twitter_username:  huxpro
+# facebook_username:  huxpro
 
 
 
@@ -50,9 +50,9 @@ kramdown:
 #disqus_username: _your_disqus_short_name_
 
 # Duoshuo settings
-duoshuo_username: huxblog
+# duoshuo_username: huxblog
 # Share component is depend on Comment so we can NOT use share only.
-duoshuo_share: true                     # set to false if you want to use Comment without Sharing
+# duoshuo_share: true                     # set to false if you want to use Comment without Sharing
 
 
 
