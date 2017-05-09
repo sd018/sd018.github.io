@@ -3,14 +3,10 @@ title: Sd018 Blog
 SEOTitle: 小付的博客 | Sd018 Blog
 header-img: img/home-bg.jpg
 email: sd018@aliyun.com
-description: ""
+description: "Hey, this is sd018"
 keyword: ""
 url: "sd018.github.io"              # your host, for absolute URL
-<<<<<<< HEAD
 # baseurl: "/sd018"         # for example, '/blog' if your blog hosted on 'host/blog'
-=======
-# baseurl: "/huxblog-boilerplate"         # for example, '/blog' if your blog hosted on 'host/blog'
->>>>>>> parent of d177ace... update
 
 
 
