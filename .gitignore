@@ -6,3 +6,4 @@ node_modules
 *.sh
 _config.yml.bak
 _layouts/page.html.bak
+*.bak
