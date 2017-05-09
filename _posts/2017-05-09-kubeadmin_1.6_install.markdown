@@ -38,13 +38,13 @@ tags:
 
 ## 配置本地yum源 ##
 
-备份系统默认`repo`  
+备份系统默认`repo`
 ```ruby
 mkdir /etc/yum.repos.d/backup
 mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/backup
 ``` 
 
-添加阿里云Yum repo  
+添加阿里云Yum repo
 ```ruby
 cat <<EOF> /etc/yum.repos.d/kubernetes.repo.repo
 [kubernetes]
@@ -64,7 +64,6 @@ yum install -y docker kubelet kubeadm kubectl kubernetes-cni
 ```
 
 RPM包安装
-
 若使用PRM包安装，切换到RPM安装包存放目录
 
 ```ruby
@@ -86,7 +85,6 @@ RPM包安装
 ```
 
 ## Docker devicemapper配置 ##
-
 新建磁盘分区
 ```ruby
 [root@vm-shalku91 ~]# fdisk -l
@@ -206,35 +204,15 @@ EOF
 
 
 
-
-######验证配置生效  
-
-    $ lvchange --metadataprofile docker-thinpool docker/thinpool
-    $ lvs -o+seg_monitor
+验证配置生效  
+```ruby
+lvchange --metadataprofile docker-thinpool docker/thinpool
+lvs -o+seg_monitor
+```
     
+配置Docker daemon
+[daemon.json](https://github.com/sd018/kuadeadm_install/blob/master/daemon.json)
 
-
-
-
-
-
-
-######配置Docker daemon
-
-    $ cat <<EOF> /etc/docker/daemon.json
-    {
-    "live-restore": true
-    }
-    
-    {
-      "storage-driver": "devicemapper",
-       "storage-opts": [
-     "dm.thinpooldev=/dev/mapper/docker-thinpool",
-     "dm.use_deferred_removal=true",
-     "dm.use_deferred_deletion=true"
-       ]
-    }
-    EOF
 ######配置 docker storage 信息
 
     [root@vm-shalku91]# more /etc/sysconfig/docker-storage
