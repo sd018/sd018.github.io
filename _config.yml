@@ -9,6 +9,8 @@ url: "sd018.github.io"              # your host, for absolute URL
 # baseurl: "/sd018"         # for example, '/blog' if your blog hosted on 'host/blog'
 
 
+#时区设置
+timezone: CN
 
 # SNS settings
 # RSS: ture
