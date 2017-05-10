@@ -507,5 +507,5 @@ yaml文件：[scope.yaml](https://github.com/sd018/kuadeadm_install/blob/master/
 > 参考https://www.weave.works/docs/scope/latest/installing/#k8s-standalone
 
 
-[kubeadm]: https://cncf.io/news/announcement/2015/07/new-cloud-native-computing-foundation-drive-alignment-among-container
+[kubeadm]: https://kubernetes.io/docs/getting-started-guides/kubeadm/
 [kubernetes]: https://kubernetes.io/
