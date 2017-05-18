@@ -483,7 +483,8 @@ yaml文件:[weave-daemonset-k8s-1.6.yaml](https://github.com/sd018/kuadeadm_inst
 ```ruby
 kubectl apply -f kube-flannel-rbac.yml kube-flannel.yml
 ```
-yaml文件:[kube-flannel.yml](https://github.com/sd018/kuadeadm_install/blob/master/kube-flannel.yml)[kube-flannel-rbac.yml](https://github.com/sd018/kuadeadm_install/blob/master/kube-flannel-rbac.yml)
+yaml文件:[kube-flannel.yml](https://github.com/sd018/kuadeadm_install/blob/master/kube-flannel.yml)
+[kube-flannel-rbac.yml](https://github.com/sd018/kuadeadm_install/blob/master/kube-flannel-rbac.yml)
 
 
  
