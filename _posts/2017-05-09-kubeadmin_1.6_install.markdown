@@ -461,6 +461,10 @@ Loaded image: gcr.io/google_containers/pause-amd64:3.0
 ```ruby
 kubeadm init --kubernetes-version=v1.6.1 --apiserver-advertise-address=10.72.243.137
 ```
+指定network
+```ruby
+kubeadm init --kubernetes-version=v1.6.1 --apiserver-advertise-address=10.72.240.65 --pod-network-cidr=10.244.0.0/16
+```
 
 复制admin.conf 至根目录
 ```ruby
