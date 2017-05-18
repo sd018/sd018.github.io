@@ -475,9 +475,17 @@ source /etc/profile
 ```
 配置weave 网络
 ```ruby
-[root@vm-shalku91 k8s]# kubectl apply -f weave-daemonset-k8s-1.6.yaml
+kubectl apply -f weave-daemonset-k8s-1.6.yaml
 ```
 yaml文件:[weave-daemonset-k8s-1.6.yaml](https://github.com/sd018/kuadeadm_install/blob/master/weave-daemonset-k8s-1.6.yaml)
+
+配置flannel 网络
+```ruby
+kubectl apply -f kube-flannel-rbac.yml kube-flannel.yml
+```
+yaml文件:[kube-flannel.yml](https://github.com/sd018/kuadeadm_install/blob/master/kube-flannel.yml)[kube-flannel-rbac.yml](https://github.com/sd018/kuadeadm_install/blob/master/kube-flannel-rbac.yml)
+
+
  
 安装完毕后，会有命令提示加入node 节点
 ```ruby
