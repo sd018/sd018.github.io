@@ -14,7 +14,7 @@ tags:
 
 * 了解性能监控基本功能
 * 熟悉常用监控对象及性能指标
-* 基本掌握性能监控的使用
+* 基本掌握性能监控的使用  
 >  
 [如何使用windows性能监视器监控CPU性能](https://jingyan.baidu.com/article/676629974510c254d51b8401.html)  
 [Perfmon - Windows 自带系统监测工具](http://blog.csdn.net/oscar999/article/details/7918385) 
@@ -73,7 +73,9 @@ tags:
 # 事件查看器
 * 了解windows事件查看器
 * 掌握查看windows相关事件
+
 > [windows事件查看器](https://jingyan.baidu.com/article/0964eca23201c88285f53604.html)
+
 # 映射磁盘
 * 掌握如何映射磁盘
 > 
