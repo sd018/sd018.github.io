@@ -70,7 +70,8 @@ tags:
 [windows自带工具扩充磁盘](http://www.cnblogs.com/tudou-loveloli/p/5173235.html)
 
 # 系统默认工具及EXTPART
-* 略  
+* 略 
+ 
 # 服务启动项确认
 
 * 了解windows服务管理工具
