@@ -8,13 +8,14 @@ header-img: "img/post-bg-js-module.jpg"
 tags:
     - windows
 ---
-
+> 介绍一些基本的windows 服务器方面的管理知识
 
 # 性能监控
 
 * 了解性能监控基本功能
 * 熟悉常用监控对象及性能指标
 * 基本掌握性能监控的使用  
+
 >  
 [如何使用windows性能监视器监控CPU性能](https://jingyan.baidu.com/article/676629974510c254d51b8401.html)  
 [Perfmon - Windows 自带系统监测工具](http://blog.csdn.net/oscar999/article/details/7918385) 
@@ -63,7 +64,7 @@ tags:
 [windows自带工具扩充磁盘](http://www.cnblogs.com/tudou-loveloli/p/5173235.html)
 
 # 系统默认工具及EXTPART
-* 略
+* 略  
 # 服务启动项确认
 
 * 了解windows服务管理工具
@@ -85,7 +86,7 @@ tags:
 * 理解虚拟内存
 * 掌握如何设置虚拟内存大小
 > 
-[虚拟内存](http://baike.baidu.com/item/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98)
+[虚拟内存](http://baike.baidu.com/item/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98)  
 [怎样设置虚拟内存](https://jingyan.baidu.com/article/2fb0ba4075567800f2ec5fcb.html)
 
 
