@@ -41,12 +41,12 @@ tags:
 备份系统默认`repo`
 ```ruby
 mkdir /etc/yum.repos.d/backup
-mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/backup
+cp /etc/yum.repos.d/*.repo /etc/yum.repos.d/backup
 ``` 
 
 添加阿里云Yum repo
 ```ruby
-cat <<EOF> /etc/yum.repos.d/kubernetes.repo.repo
+cat <<EOF> /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
 baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
