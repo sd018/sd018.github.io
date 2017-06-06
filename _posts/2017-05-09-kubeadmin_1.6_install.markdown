@@ -235,8 +235,8 @@ DOCKER_STORAGE_OPTIONS="--storage-driver devicemapper  --storage-opt dm.thinpool
 配置log driver信息
 为了便于docker 日志排查，将日志模式改为syslog并输出到ELK平台。
 
+> Note:若暂无需输出到ELK平台,则不用修改log-driver  
 
-> Note:若暂无需输出到ELK平台,则不用修改log-driver
 ```ruby
 [root@vm-shalku91 k8s]# more /etc/sysconfig/docker
 # /etc/sysconfig/docker

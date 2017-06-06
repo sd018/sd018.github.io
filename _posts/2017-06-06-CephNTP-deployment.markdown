@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "Ceoh NTP Server Configuration "
-subtitle:   
+subtitle:   " \"如何部署NTP Server\""
 date:       2017-6-6 14:43:01  
 author:     "sd018"
 header-img: "img/post-bg-unix-linux.jpg"
