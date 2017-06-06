@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      "Ceoh NTP 配置"
-subtitle:   " \"introduction how to deploy NTP Server\""
+title:      "Ceoh NTP Server Configuration "
+subtitle:   " \"\""
 date:       2017-6-6 14:43:01  
 author:     "sd018"
 header-img: "img/post-bg-unix-linux.jpg"
@@ -16,7 +16,7 @@ tags:
 发生时钟同步问题时，Ceph集群报错信息如下
 
 ```ruby
-[root@vm-shalce98 ~]# ceph -s
+[root@vm-shalce97 ~]# ceph -s
     cluster 84db831c-1f29-44a7-a601-eddd24a70ae4
      health HEALTH_WARN
      clock skew detected on vm-shalce99
@@ -121,14 +121,15 @@ disable monitor
 ```ruby
 systemctl daemon-reload && systemctl restart ntpd
 ```
-检查NTP服务正常运行
+检查NTP服务正常运行`ntpq  -p`
 ```ruby
 [root@vm-shalce97 ~]# ntpq  -p
      remote           refid      st t when poll reach   delay   offset  jitter
 ==============================================================================
  shasatdc02.aego .LOCL.           1 u   50   64  377    2.578    3.574   7.217
 ```
-
+可以观察到时间同步delay时间不断趋近，时间不会超过5分钟，表示NTP配置正常。
+在其他Ceph节点依次进行如上操作，使整个群集时钟同步。
 
 
        

@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "windows Server Managerment"
+title:      "Windows Server Managerment"
 subtitle:   " \"introduction how to manager windows server\""
 date:       2017-5-31 14:41:14  
 author:     "sd018"
