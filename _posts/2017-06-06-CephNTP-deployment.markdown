@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "Ceoh NTP Server Configuration "
-subtitle:   " \"\""
+subtitle:   
 date:       2017-6-6 14:43:01  
 author:     "sd018"
 header-img: "img/post-bg-unix-linux.jpg"
@@ -12,7 +12,7 @@ tags:
 
 > 搭建多节点Ceph存储集群时，若不配置NTP服务，则会发生时间同步问题。本文简单介绍下Ceph服务器NTP的设置。
 
-# 
+ 
 发生时钟同步问题时，Ceph集群报错信息如下
 
 ```ruby

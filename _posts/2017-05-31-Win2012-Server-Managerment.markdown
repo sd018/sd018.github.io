@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "Windows Server Managerment"
-subtitle:   " \"introduction how to manager windows server\""
+subtitle:   " \"分享一些基础的Windows服务器管理知识\""
 date:       2017-5-31 14:41:14  
 author:     "sd018"
 header-img: "img/post-bg-js-module.jpg"
