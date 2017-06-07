@@ -232,6 +232,13 @@ EOF
 [root@vm-shalku91]# more /etc/sysconfig/docker-storage
 DOCKER_STORAGE_OPTIONS="--storage-driver devicemapper  --storage-opt dm.thinpooldev=/dev/mapper/docker-thinpool --storage-opt dm.use_deferred_removal=true "
 ```  
+开启服务器bridge模式
+```ruby
+cat <<EOF> /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+```  
 配置log driver信息
 为了便于docker 日志排查，将日志模式改为syslog并输出到ELK平台。
 
