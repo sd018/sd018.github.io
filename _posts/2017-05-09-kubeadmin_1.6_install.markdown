@@ -480,7 +480,7 @@ kubeadm init --kubernetes-version=v1.6.1 --apiserver-advertise-address=10.72.240
 ```ruby
 sudo cp /etc/kubernetes/admin.conf $HOME/
 sudo chown $(id -u):$(id -g) $HOME/admin.conf
-echo “KUBECONFIG=$HOME/admin.conf” >> /etc/profile
+echo "export KUBECONFIG=/root/admin.conf" >> /etc/profile
 source /etc/profile
 ```
 配置weave 网络
