@@ -2,7 +2,7 @@
 layout:     post
 title:      "Kubeadm install"
 subtitle:   " \"introduction how to install k8s with kubeadm\""
-date:       2017-5-10 11:02:25 
+date:       2017-5-10 11:02:25
 author:     "sd018"
 header-img: "img/post-bg-2015.jpg"
 tags:
@@ -10,7 +10,7 @@ tags:
 ---
 
 
-# Kubeadm v1.6.1 
+# Kubeadm v1.6.1
 
 
 
@@ -39,13 +39,13 @@ tags:
 ### 配置本地yum源 ##
 
 备份系统默认`repo`
-```ruby
+```bash
 mkdir /etc/yum.repos.d/backup
 cp /etc/yum.repos.d/*.repo /etc/yum.repos.d/backup
-``` 
+```
 
 添加阿里云Yum repo
-```ruby
+```bash
 cat <<EOF> /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -53,20 +53,20 @@ baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
 enabled=1
 gpgcheck=0
 repo_gpgcheck=0
-gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg 
-http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg 
+gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
 ```
 
 安装docker kubelet kubeadm kubectl组件
-```ruby
+```bash
 yum install -y docker kubelet kubeadm kubectl kubernetes-cni
 ```
 
 RPM包安装
 若使用PRM包安装，切换到RPM安装包存放目录
 
-```ruby
+```bash
 [root@vm-shalku91 ~]# cd k8s
 [root@vm-shalku91 k8s]# ll
 -rw-r--r-- 1 root root  8217270 Apr 12 11:34 23961d0f7dca1ed118b948195f2fb5dd7a07503d69d7d8ab4433219ea98d033e-kubeadm-1.6.1-0.x86_64.rpm
@@ -86,7 +86,7 @@ RPM包安装
 
 ### Docker devicemapper配置 ##
 新建磁盘分区
-```ruby
+```bash
 [root@vm-shalku91 ~]# fdisk -l
 Disk /dev/sda: 21.5 GB, 21474836480 bytes, 41943040 sectors
 Units = sectors of 1 * 512 = 512 bytes
@@ -134,12 +134,12 @@ Command (m for help): n
 Partition type:
    p   primary (0 primary, 0 extended, 4 free)
    e   extended
-Select (default p): 
+Select (default p):
 Using default response p
-Partition number (1-4, default 1): 
-First sector (2048-83886079, default 2048): 
+Partition number (1-4, default 1):
+First sector (2048-83886079, default 2048):
 Using default value 2048
-Last sector, +sectors or +size{K,M,G} (2048-83886079, default 83886079): 
+Last sector, +sectors or +size{K,M,G} (2048-83886079, default 83886079):
 Using default value 83886079
 Partition 1 of type Linux and of size 40 GiB is set
 
@@ -165,31 +165,31 @@ The partition table has been altered!
 
 Calling ioctl() to re-read partition table.
 Syncing disks.
-[root@vm-shalku91 ~]# partprobe 
+[root@vm-shalku91 ~]# partprobe
 ```
 
 创建PV卷
-```ruby
+```bash
 pvcreate /dev/sdb1
 ```
 
 创建VG卷
-```ruby
+```bash
 vgcreate docker /dev/sdb1
 ```
 创建LV卷
-```ruby
+```bash
 lvcreate --wipesignatures y -n thinpool docker -l 95%VG
 lvcreate --wipesignatures y -n thinpoolmeta docker -l 1%VG
 ```
 
 格式化LV
-```ruby
+```bash
 lvconvert -y --zero n -c 512K --thinpool docker/thinpool --poolmetadata docker/thinpoolmeta
 ```
 
 配置LVM Proflie
-```ruby
+```bash
 cat <<EOF> /etc/lvm/profile/docker-thinpool.profile
 activation {
 thin_pool_autoextend_threshold=80
@@ -198,18 +198,18 @@ thin_pool_autoextend_percent=20
 EOF
 ```
 配置文件见：[docker-thinpool.profile](https://github.com/sd018/kuadeadm_install/blob/master/docker-thinpool.profile)
-   
+
 
 
 
 验证配置生效  
-```ruby
+```bash
 lvchange --metadataprofile docker-thinpool docker/thinpool
 lvs -o+seg_monitor
 ```
-    
+
 配置Docker daemon
-```ruby
+```bash
 cat <<EOF> /etc/docker/daemon.json
 {
 "live-restore": true
@@ -228,12 +228,12 @@ EOF
 配置文件见：[daemon.json](https://github.com/sd018/kuadeadm_install/blob/master/daemon.json)
 
 配置 docker storage 信息
-```ruby
+```bash
 [root@vm-shalku91]# more /etc/sysconfig/docker-storage
 DOCKER_STORAGE_OPTIONS="--storage-driver devicemapper  --storage-opt dm.thinpooldev=/dev/mapper/docker-thinpool --storage-opt dm.use_deferred_removal=true "
 ```  
 开启服务器bridge模式
-```ruby
+```bash
 cat <<EOF> /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
@@ -244,7 +244,7 @@ EOF
 
 > Note:若暂无需输出到ELK平台,则不用修改log-driver  
 
-```ruby
+```bash
 [root@vm-shalku91 k8s]# more /etc/sysconfig/docker
 # /etc/sysconfig/docker
 # Modify these options if you want to change the way the docker daemon runs
@@ -292,7 +292,7 @@ fi
 #DOCKER_CONTAINERD_SHIM_BINARY=/usr/bin/docker-containerd-shim-latest
 ```
 配置docker 自定义信息
-```ruby
+```bash
 [root@vm-shalku91 k8s]# more /usr/lib/systemd/system/docker.service
 [Unit]
 Description=Docker Application Container Engine
@@ -338,11 +338,11 @@ WantedBy=multi-user.target
 ```
 
 重启docker 生效
-```ruby
+```bash
 systemctl daemon-reload&&systemctl start docker
 ```
 验证信息
-```ruby
+```bash
 [root@vm-shalku91 ~]# docker info
 Containers: 19
  Running: 19
@@ -355,8 +355,8 @@ Storage Driver: devicemapper
  Pool Blocksize: 524.3 kB
  Base Device Size: 10.74 GB
  Backing Filesystem: xfs
- Data file: 
- Metadata file: 
+ Data file:
+ Metadata file:
  Data Space Used: 2.364 GB
  Data Space Total: 40.8 GB
  Data Space Available: 38.43 GB
@@ -396,7 +396,7 @@ Insecure Registries:
  127.0.0.0/8
 Registries: registry.aegonthtf.com (secure), docker.io (secure)
 ```
- 
+
 > 参考：
 > https://docs.docker.com/engine/userguide/storagedriver/device-mapper-driver/
 
@@ -405,7 +405,7 @@ Registries: registry.aegonthtf.com (secure), docker.io (secure)
 
 若公司网络环境使用代理配置，则配置如下
 配置docker 代理
-```ruby
+```bash
 mkdir /etc/systemd/system/docker.service.d
 sudo tee /etc/systemd/system/docker.service.d/http-proxy.conf <<-'EOF'
 [Service]
@@ -416,7 +416,7 @@ EOF
 更改kubelet Cgroup配置
 
 因为kubelet 默认--cgroup-driver与docker 冲突，改为systemd。
-```ruby
+```bash
 sudo tee /etc/systemd/system/kubelet.service.d/10-kubeadm.conf <<-'EOF'
 [Service]
 Environment="KUBELET_KUBECONFIG_ARGS=--kubeconfig=/etc/kubernetes/kubelet.conf --require-kubeconfig=true"
@@ -430,7 +430,7 @@ ExecStart=/usr/bin/kubelet $KUBELET_CGRPUP $KUBELET_KUBECONFIG_ARGS $KUBELET_SYS
 EOF
 ```
 关闭防火墙，启动docker和kubelet
-```ruby
+```bash
 setenforce 0
 systemctl daemon-reload
 systemctl disable firewalld.service&&systemctl stop firewalld.service
@@ -440,7 +440,7 @@ systemctl enable kubelet&&systemctl start kubelet
 
 
 ### 导入google镜像
-```ruby
+```bash
 [root@vm-shalku91 k8s]# cd /root/k8s_images
 [root@vm-shalku91 k8s_images]# ll |grep .tar
 -rw------- 1 root root 169167872 Apr 11 14:34 etcd-amd64.tar
@@ -468,38 +468,38 @@ Loaded image: gcr.io/google_containers/pause-amd64:3.0
 
 
 ### kubeadmin 安装
-```ruby
+```bash
 kubeadm init --kubernetes-version=v1.6.1 --apiserver-advertise-address=10.72.243.137
 ```
 指定network
-```ruby
+```bash
 kubeadm init --kubernetes-version=v1.6.1 --apiserver-advertise-address=10.72.240.65 --pod-network-cidr=10.244.0.0/16
 ```
 
 复制admin.conf 至根目录
-```ruby
+```bash
 sudo cp /etc/kubernetes/admin.conf $HOME/
 sudo chown $(id -u):$(id -g) $HOME/admin.conf
 echo "export KUBECONFIG=/root/admin.conf" >> /etc/profile
 source /etc/profile
 ```
 配置weave 网络
-```ruby
+```bash
 kubectl apply -f weave-daemonset-k8s-1.6.yaml
 ```
 yaml文件:[weave-daemonset-k8s-1.6.yaml](https://github.com/sd018/kuadeadm_install/blob/master/weave-daemonset-k8s-1.6.yaml)
 
 配置flannel 网络
-```ruby
+```bash
 kubectl apply -f kube-flannel-rbac.yml kube-flannel.yml
 ```
 yaml文件:[kube-flannel.yml](https://github.com/sd018/kuadeadm_install/blob/master/kube-flannel.yml)
 [kube-flannel-rbac.yml](https://github.com/sd018/kuadeadm_install/blob/master/kube-flannel-rbac.yml)
 
 
- 
+
 安装完毕后，会有命令提示加入node 节点
-```ruby
+```bash
 kubeadm join --token 054650.0ecaaf64fb14da94 10.72.243.137:6443
 ```
 > 参考https://kubernetes.io/docs/getting-started-guides/kubeadm/
@@ -510,7 +510,7 @@ kubeadm join --token 054650.0ecaaf64fb14da94 10.72.243.137:6443
 
 
 ### 部署K8s_dashboard
-```ruby
+```bash
 [root@vm-shalku91 k8s]# kubectl create -f kube-dashboard-rbac.yml
 [root@vm-shalku91 k8s]# kubectl create -f kubernetes-dashboard.yaml
 ```
@@ -518,11 +518,11 @@ yaml文件：
 [kube-dashboard-rbac.yml](https://github.com/sd018/kuadeadm_install/blob/master/kube-dashboard-rbac.yml)  
 [kubernetes-dashboard.yaml](https://github.com/sd018/kuadeadm_install/blob/master/kubernetes-dashboard.yaml)
 
-**Note:** 
+**Note:**
 因k8s 1.6 dashboard 没有权限访问default namespace，具体参考https://github.com/kubernetes/dashboard/issues/1803
 
 ### 部署weavescope
-```ruby
+```bash
 [root@vm-shalku91 k8s]# kubectl apply -f scope.yaml  --namespace="kube-system"
 ```
 yaml文件：[scope.yaml](https://github.com/sd018/kuadeadm_install/blob/master/scope.yaml)
