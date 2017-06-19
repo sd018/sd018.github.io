@@ -8,7 +8,6 @@ header-img: "img/post-bg-docker-lvm.jpg"
 tags:
     - docker
 ---
-[TOC]
 
 > Dokcer device 模式切换成direct-lvm后，尽管有LVM自动扩展功能。但当VG剩余空间扩充完后，则会导致存储空间异常。我们可以通过`lvs`或`lvs -a`来监控我们的资源池，也可以通过第三方监控软件从OS层面监控，如Nagios。下文介绍当资源池资源不足时，如何扩充存储空间。
 

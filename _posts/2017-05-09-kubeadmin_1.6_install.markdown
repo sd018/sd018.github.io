@@ -11,7 +11,7 @@ tags:
 
 
 # Kubeadm v1.6.1
-[TOC]
+
 
 
 
@@ -183,6 +183,7 @@ lvcreate --wipesignatures y -n thinpool docker -l 95%VG
 lvcreate --wipesignatures y -n thinpoolmeta docker -l 1%VG
 ```
 
+
 格式化LV
 ```bash
 lvconvert -y --zero n -c 512K --thinpool docker/thinpool --poolmetadata docker/thinpoolmeta
@@ -198,7 +199,6 @@ thin_pool_autoextend_percent=20
 EOF
 ```
 配置文件见：[docker-thinpool.profile](https://github.com/sd018/kuadeadm_install/blob/master/docker-thinpool.profile)
-
 
 
 
