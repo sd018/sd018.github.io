@@ -9,9 +9,9 @@ tags:
     - docker
 ---
 
-> Dokcer device 模式切换成direct-lvm后，尽管有LVM自动扩展功能。但当VG剩余空间扩充完后，则会导致存储空间异常。我们可以通过`lvs`或`lvs -a`来监控我们的资源池，也可以通过第三方监控软件从OS层面监控，如Nagios。下文介绍当资源池资源不足时，如何扩充存储空间。
+> Docker device 模式切换成direct-lvm后，尽管有LVM自动扩展功能。但当VG剩余空间扩充完后，则会导致存储空间异常。我们可以通过`lvs`或`lvs -a`来监控我们的资源池，也可以通过第三方监控软件从OS层面监控，如Nagios。下文介绍当资源池资源不足时，如何扩充存储空间。
 
-若需要扩展`direct-lvm`资源池，首先在Dokcer主机上添加一块磁盘并分配给dokcer。具体步骤如下：  
+若需要扩展`direct-lvm`资源池，首先在docker主机上添加一块磁盘并分配给docker。具体步骤如下：  
 查看现有存储使用情况
 ```bash
 [root@template-centos_k8s ~]# lvs -o+seg_monitor
