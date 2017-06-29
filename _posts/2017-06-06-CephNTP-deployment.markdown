@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "Ceoh NTP Server Configuration "
+title:      "Ceph NTP Server Configuration "
 subtitle:   " \"如何部署NTP Server\""
 date:       2017-6-6 14:43:01  
 author:     "sd018"
@@ -12,7 +12,7 @@ tags:
 
 > 搭建多节点Ceph存储集群时，若不配置NTP服务，则会发生时间同步问题。本文简单介绍下Ceph服务器NTP的设置。
 
- 
+
 发生时钟同步问题时，Ceph集群报错信息如下
 
 ```ruby
@@ -67,7 +67,7 @@ restrict default nomodify notrap nopeer noquery
 # Permit all access over the loopback interface.  This could
 # be tightened as well, but to do so would effect some of
 # the administrative functions.
-restrict 127.0.0.1 
+restrict 127.0.0.1
 restrict ::1
 
 # Hosts on local network are less restricted.
@@ -96,7 +96,7 @@ server 10.72.1.9
 includefile /etc/ntp/crypto/pw
 
 # Key file containing the keys and key identifiers used when operating
-# with symmetric key cryptography. 
+# with symmetric key cryptography.
 keys /etc/ntp/keys
 
 # Specify the key identifiers which are trusted.
@@ -130,6 +130,3 @@ systemctl daemon-reload && systemctl restart ntpd
 ```
 可以观察到时间同步delay时间不断趋近，时间不会超过5分钟，表示NTP配置正常。
 在其他Ceph节点依次进行如上操作，使整个群集时钟同步。
-
-
-       
