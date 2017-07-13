@@ -130,3 +130,8 @@ systemctl daemon-reload && systemctl restart ntpd
 ```
 可以观察到时间同步delay时间不断趋近，时间不会超过5分钟，表示NTP配置正常。
 在其他Ceph节点依次进行如上操作，使整个群集时钟同步。
+
+手动同步命令
+```
+ntpdate -u {HostI P}
+```
