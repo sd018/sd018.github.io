@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      "ceph install  "
-subtitle:   " \"ceph jewel版完整部署  \""
+title:      "Ceph install  "
+subtitle:   " \"Ceph jewel版完整部署  \""
 date:       2017-7-11 14:33:01  
 author:     "sd018"
 header-img: "img/post-bg-ceph.jpg"
@@ -68,12 +68,14 @@ echo 'kernel.pid_max = 4194303' >> /etc/sysctl.conf
 ```bash
 echo 'fs.file-max = 26234859' >> /etc/sysctl.conf
 ```
-* 调整文件句柄最大数，默认是1024，这里我们需要把这个值放大到
+* 调整文件句柄最大数，默认是1024，这里我们需要把这个值放大到  
+
 ```bash
 echo '*  soft  nofile  65536' >> /etc/security/limits.conf
 echo '*  hard  nofile  65536' >> /etc/security/limits.conf
 ```
-* 修改磁盘的I/O Scheduler
+* 修改磁盘的I/O Scheduler  
+
 ```bash
 echo 'SUBSYSTEM=="block", ATTR{device/model}=="VBOX HARDDISK", ACTION=="add|change", KERNEL=="sd[a-h]", ATTR{queue/scheduler}="noop",ATTR{queue/read_ahead_kb}="8192"' > /etc/udev/rules.d/99-disk.rules
 ```
