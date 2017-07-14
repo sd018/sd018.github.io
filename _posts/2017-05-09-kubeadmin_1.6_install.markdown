@@ -483,6 +483,12 @@ sudo chown $(id -u):$(id -g) $HOME/admin.conf
 echo "export KUBECONFIG=/root/admin.conf" >> /etc/profile
 source /etc/profile
 ```
+添加自动补全命令参数
+
+```bash
+source <(kubectl completion bash)
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+```
 配置weave 网络
 ```bash
 kubectl apply -f weave-daemonset-k8s-1.6.yaml
