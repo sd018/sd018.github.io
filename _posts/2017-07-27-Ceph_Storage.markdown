@@ -8,6 +8,7 @@ header-img: "img/post-bg-ceph.jpg"
 tags:
     - ceph
 ---
+> 本章主要介绍Ceph的三种存储访问类型，以及它们的简单介绍、部署、使用与使用场景。可以选择适合的Ceph存储的设计方案。
 # Ceph Object Gateway Quick Start
 RGW是Ceph对象存储网关服务的RADOS Gateway的简称，是一套基于LIBRADOS接口封装而实现的FasrCGI服务，对外提供RESTful风格的对象存储访问和管理接口。RGW基于HTTP协议标准，因此非常适合用于Web类的互联网应用场景。
 
@@ -167,7 +168,7 @@ mount.ceph  10.72.240.110:6789:/ /test  -o name=admin,secret=AQC/slVZq293EhAAqXR
 # Block Device Quick Start
 RBD块存储是Ceph提供的3种存储类型中使用最广泛、最稳定的存储类型。RBD块设备类似于磁盘，它可以挂载到物理机或虚拟机中。
 
-创建一个1GB块设备
+部署RBD实例
 ```
 [root@vm-shaltt90 ~]# rbd create test_image --size 1024
 ```
