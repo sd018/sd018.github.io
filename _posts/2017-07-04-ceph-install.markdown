@@ -467,4 +467,4 @@ set pool 0 pg_num to 256
 set pool 0 pgp_num to 256
 ```
 # 总结
-以上主要涉及Ceph的基础架构部署，其他的三种存储类型的调用，详见另一篇博客。
+以上主要涉及Ceph的基础架构部署，其他的三种存储类型的调用，详见另一篇博客["Ceph Storage Deploy"](https://sd018.github.io/2017/07/27/Ceph_Storage/)。
