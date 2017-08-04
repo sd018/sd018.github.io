@@ -8,7 +8,8 @@ header-img: "img/post-bg-ceph.jpg"
 tags:
     - ceph
 ---
-> 本章主要介绍Ceph的三种存储访问类型，以及它们的简单介绍、部署、使用与使用场景。可以选择适合的Ceph存储的设计方案。
+> 本章主要介绍Ceph的三种存储访问类型，以及它们的简单介绍、部署、使用与使用场景。可以选择适合的Ceph存储的设计方案。    
+ 
 # Ceph Object Gateway Quick Start
 RGW是Ceph对象存储网关服务的RADOS Gateway的简称，是一套基于LIBRADOS接口封装而实现的FasrCGI服务，对外提供RESTful风格的对象存储访问和管理接口。RGW基于HTTP协议标准，因此非常适合用于Web类的互联网应用场景。
 
