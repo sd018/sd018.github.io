@@ -1,0 +1,87 @@
+---
+layout:     post
+title:      "Ceph RBD auto mount "
+subtitle:   " \"如何设置Ceph RBD 挂载  \""
+date:       2017-11-30 17:22:01  
+author:     "sd018"
+header-img: "img/post-bg-ceph.jpg"
+tags:
+    - ceph
+---
+> 本文主要介绍如何实现RBD 开机自动挂载功能。
+
+# Ceph RBD auto mount
+Ceph RBD 向内核模板或者KVM 主机通过libvirt与Ceph 块设备集成，提供支持无限伸缩的存储服务。为了实现KVM主机RBD的自动挂载。
+下面以Cenot7为例：
+
+安装ceph命令工具
+```bash
+yum install ceph-common*
+```
+复制ceph认证文件信息至KVM主机
+```bash
+cd /etc/ceph
+scp root@vm-shalce99.aegonthtf.com:/root/cluster/ceph.client.admin.keyring .
+scp root@vm-shalce99.aegonthtf.com:/root/cluster/ceph.conf .
+
+```
+挂载RBD Image
+```
+rbd map Host-test/VM-SHALLT96-DATA1
+```
+格式化
+```
+mkfs.xfs /dev/rbd0
+```
+添加自定义挂载脚本
+```
+vi /usr/local/bin/rbd-mount
+#!/bin/bash
+export poolname=Host-test    
+
+# CHange with your disk image name
+export rbdimage=VM-SHALLT96-DATA1
+
+# Mount Directory
+export mountpoint=/usr/share/elasticsearch/data
+
+# Image mount/unmount and pool are passed from the systems service as arguments
+# Determine if we are mounting or unmounting
+if [ "$1" == "m" ]; then
+   modprobe rbd
+   rbd map $poolname"/"$rbdimage
+   mkdir -p $mountpoint
+   mount /dev/rbd/$poolname/$rbdimage $mountpoint
+fi
+if [ "$1" == "u" ]; then
+   umount $mountpoint
+   rbd unmap /dev/rbd/$poolname/$rbdimage
+fi
+
+```
+添加可执行权限
+```
+ chmod u+x /usr/local/bin/rbd-mount
+```
+
+设置开机服务启动脚本
+```
+vi /usr/lib/systemd/system/rbd-mount.service
+[Unit]
+Description=RADOS block device mapping for $rbdimage in pool $poolname"
+Conflicts=shutdown.target
+Wants=network-online.target
+After=NetworkManager-wait-online.service
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/rbd-mount m
+ExecStop=/usr/local/bin/rbd-mount u
+[Install]
+WantedBy=multi-user.target
+```
+启用开机任务
+```
+ systemctl enable rbd-mount.service
+```
+配置完毕后，重启验证下RBD是否正常挂载。
